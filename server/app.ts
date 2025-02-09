@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import { ErrorMiddleware } from './middleware/error';
 export const app=express();
 import userRouter from './routes/user.route'
+import courseRouter from './routes/course.route';
 
 
 require('dotenv').config();
@@ -19,6 +20,7 @@ app.use(cors({origin:process.env.ORIGIN}));
 
 //testing api
 app.use('/api/v1',userRouter)
+app.use('/api/v1',courseRouter)
 app.get('/test',(req:Request,res:Response,next:NextFunction)=>{
     res.status(200).json({
         success:true,
