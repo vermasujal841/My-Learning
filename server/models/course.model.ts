@@ -4,7 +4,7 @@ import { IUser } from "./user.model";
 export interface IComment extends Document {
   user: IUser;
   question: string;
-  commentReplies: IComment[];
+  questionReplies: IComment[];
 }
 
 interface IReview extends Document {
@@ -55,6 +55,7 @@ const reviewSchema = new Schema<IReview>({
     default: 0,
   },
   comment: String,
+  commentReplies: [Object],
 },{timestamps:true});
 
 const linkSchema = new Schema<ILink>({
@@ -65,7 +66,7 @@ const linkSchema = new Schema<ILink>({
 const commentSchema = new Schema<IComment>({
   user: Object,
   question: String,
-  commentReplies: [Object],
+  questionReplies: [Object],
 },{timestamps:true});
 
 const courseDataSchema = new Schema<ICourseData>({
