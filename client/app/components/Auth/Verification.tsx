@@ -1,5 +1,5 @@
 import { styles } from "@/app/styles/style";
-
+import { useActivationMutation } from "@/redux/features/auth/authApi";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
@@ -18,9 +18,24 @@ type VerifyNumber = {
 
 const Verification: FC<Props> = ({ setRoute }) => {
   const { token } = useSelector((state: any) => state.auth);
-  
+  const [activation,{isSuccess, error}]=useActivationMutation();
   const [invalidError, setInvalidError] = useState<boolean>(false);
-
+   useEffect(()=>{
+    if(isSuccess) {
+      toast.success("Account activated successfully");
+      setRoute("Login");
+    };
+    if(error){
+      if("data" in error){
+        const errorData = error as any;
+        toast.error(errorData.data.message);
+        setInvalidError(true);
+      }
+      else{
+        console.log('An error occured: ',error);
+      }
+    }
+   },[isSuccess,error])
   
 
   const inputRefs = [

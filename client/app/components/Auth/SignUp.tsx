@@ -9,12 +9,12 @@ import {
 } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { styles } from "../../../app/styles/style";
-
+import { useRegisterMutation } from "@/redux/features/auth/authApi";
 import { toast } from "react-hot-toast";
 
 type Props = {
   setRoute: (route: string) => void;
-};
+}; 
 
 const schema = Yup.object().shape({
   name: Yup.string().required("Please enter your name!"),
@@ -26,9 +26,21 @@ const schema = Yup.object().shape({
 
 const Signup: FC<Props> = ({ setRoute }) => {
   const [show, setShow] = useState(false);
- 
+  const [register,{data,error,isSuccess}] = useRegisterMutation(); 
 
- 
+  useEffect(() => {
+   if(isSuccess){
+      const message = data?.message || "Registration successful";
+      toast.success(message);
+      setRoute("Verification");
+   }
+   if(error){
+    if("data" in error){
+      const errorData = error as any;
+      toast.error(errorData.data.message);
+    }
+   }
+  }, [isSuccess,error]);
   
 
   const formik = useFormik({
@@ -38,6 +50,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
       const data = {
         name,email,password
       };
+      await register(data);
     },
   });
 
@@ -45,7 +58,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
 
   return (
     <div className="w-full">
-      <h1 className={`${styles.title}`}>Join to MyLearning</h1>
+      <h1 className={`${styles.title}`}>Join to ELearning</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className={`${styles.label}`} htmlFor="email">

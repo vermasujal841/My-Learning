@@ -20,7 +20,10 @@ app.use(cookieParser());
 //body parser
 app.use(express.json({limit:"50mb"}));
 //cors cross origin resource sharing
-app.use(cors({origin:process.env.ORIGIN}));
+app.use(cors({
+    origin:['http://localhost:3000'],
+    credentials:true
+}));
 
 //testing api
 app.use('/api/v1',userRouter)
