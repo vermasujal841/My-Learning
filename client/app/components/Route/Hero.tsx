@@ -8,7 +8,7 @@ type Props = {};
 
 const Hero: FC<Props> = () => {
   return (
-    <div className="w-full flex flex-col 1000px:flex-row items-center relative">
+    <div className="w-full min-h-screen flex flex-col 1000px:flex-row items-center relative bg-[#f5f5f5] dark:bg-[#121212]">
       {/* Background Animation */}
       <div className="absolute top-[100px] 1000px:top-[unset] 1500px:h-[700px] 1500px:w-[700px] 
         1100px:h-[600px] 1100px:w-[600px] h-[40vh] left-5 w-[40vh] 
@@ -16,13 +16,13 @@ const Hero: FC<Props> = () => {
       </div>
 
       {/* Image Section */}
-      <div className="1000px:w-[40%] flex items-center justify-end pt-[70px] 1000px:pt-0 z-10">
+      <div className="1000px:w-[40%] flex items-center justify-center pt-[70px] 1000px:pt-0 z-10">
         <Image
           src="/assets/banner-img-1.png"
-          width={400}
-          height={400}
+          width={500}
+          height={500}
           alt="Banner"
-          className="object-contain 1100px:max-w-[90%] w-[90%] 1500px:max-w-[85%] h-auto z-10"
+          className="object-contain w-[90%] max-w-[500px] 1500px:max-w-[85%] h-auto z-10 ml-[100px]"
         />
       </div>
 
@@ -32,17 +32,14 @@ const Hero: FC<Props> = () => {
           font-[600] font-Josefin py-2 1000px:leading-[75px] 1500px:w-[60%] 1100px:w-[78%]">
           Lorem ipsum dolor sit amet,
         </h2>
-        <br />
         <p className="dark:text-[#edfff4] text-[#000000ac] font-Josefin font-[600] text-[18px] 
           1500px:w-[55%] 1100px:w-[78%]">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac arcu lectus. Donec ultricies, 
           justo sit amet commodo fermentum, justo neque scelerisque velit, sit amet consectetur urna eros non ex.
         </p>
-        <br />
-        <br />
 
         {/* Search Bar */}
-        <div className="relative w-[90%] 1100px:w-[78%] 1500px:w-[55%] h-[50px]">
+        <div className="relative w-[90%] 1100px:w-[78%] 1500px:w-[55%] h-[50px] mt-6">
           <input
             type="search"
             placeholder="Search Courses..."
@@ -52,11 +49,9 @@ const Hero: FC<Props> = () => {
           />
           <BiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white" size={30} />
         </div>
-        <br />
-        <br />
 
         {/* Client Section */}
-        <div className="w-[90%] 1100px:w-[78%] 1500px:w-[55%] flex items-center">
+        <div className="w-[90%] 1100px:w-[78%] 1500px:w-[55%] flex items-center mt-6">
           <Image src="/assets/client-1.jpg" width={40} height={40} alt="Client 1" className="rounded-full" />
           <Image src="/assets/client-2.jpg" width={40} height={40} alt="Client 2" className="rounded-full ml-[-20px]" />
           <Image src="/assets/client-3.jpg" width={40} height={40} alt="Client 3" className="rounded-full ml-[-20px]" />
@@ -67,7 +62,6 @@ const Hero: FC<Props> = () => {
             </Link>{" "}
           </p>
         </div>
-        <br />
       </div>
     </div>
   );
