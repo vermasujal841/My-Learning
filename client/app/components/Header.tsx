@@ -1,45 +1,88 @@
-'use client'
-import Link from 'next/link';
-import React,{FC,useState} from 'react'
-import NavItems from '../utils/NavItems';
-import {ThemeSwitcher} from '../utils/ThemeSwitcher';
-import {HiOutlineMenuAlt3, HiOutlineUserCircle} from 'react-icons/hi';
+"use client";
+import Link from "next/link";
+import React, { FC, useEffect, useState } from "react";
+import NavItems from "../utils/NavItems";
+import { ThemeSwitcher } from "../utils/ThemeSwitcher";
+import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
 import CustomModal from "../utils/CustomModal";
 import Login from "../components/Auth/Login";
 import SignUp from "../components/Auth/SignUp";
-import  Verification  from "../components/Auth/Verification";
-import { useSelector } from 'react-redux';
-import Image from 'next/image';
-import avatar from "../../public/assets/client-1.jpg";
-type Props={
-open: boolean;
-setOpen: (open: boolean) =>void;
-activeItem:number;
-route:string;
-setRoute: (route: string) => void;
-}
-const Header:FC<Props> = ({activeItem,setOpen,setRoute,route,open}) => {
-    const [active, setActive] = useState(false);
-    const [openSidebar, setOpenSidebar] = useState(false);
-    const {user} = useSelector((state:any)=>state.auth)
-    if (typeof window !== "undefined") {
-        window.addEventListener("scroll", () => {
-          if (window.scrollY > 85) {
-            setActive(true);
-          } else {
-            setActive(false);
-          }
-        });
-      }
-      const handleClose = (e:any) => {
-        if (e.target.id === "screen") {
-          {
-            setOpenSidebar(false);
-          }
+import Verification from "../components/Auth/Verification";
+import Image from "next/image";
+import avatar from "../../public/assets/avatar.png";
+import { useSession } from "next-auth/react";
+import { useLogOutQuery, useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import { toast } from "react-hot-toast";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import Loader from "./Loader/Loader";
+
+type Props = {  
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  activeItem: number; 
+  route: string;
+  setRoute: (route: string) => void;
+};
+
+const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
+  const [active, setActive] = useState(false);
+  const [openSidebar, setOpenSidebar] = useState(false);
+  const {data:userData,isLoading,refetch} = useLoadUserQuery(undefined,{});
+  const { data } = useSession();
+  const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
+  const [logout, setLogout] = useState(false);
+  const {} = useLogOutQuery(undefined, {
+    skip: !logout ? true : false,
+  });
+
+  useEffect(() => {
+    if(!isLoading){
+      if (!userData) {
+        if (data) {
+          socialAuth({
+            email: data?.user?.email,
+            name: data?.user?.name,
+            avatar: data.user?.image,
+          });
+          refetch();
         }
-      };
+      }
+      if(data === null){
+        if(isSuccess){
+          toast.success("Login Successfully");
+        }
+      }
+      if(data === null && !isLoading && !userData){
+          setLogout(true);
+      }
+    }
+  }, [data, userData,isSuccess]);
+
+  if (typeof window !== "undefined") {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 85) {
+        setActive(true);
+      } else {
+        setActive(false);
+      }
+    });
+  }
+
+  const handleClose = (e: any) => {
+    if (e.target.id === "screen") {
+      {
+        setOpenSidebar(false);
+      }
+    }
+  };
+
   return (
-    <div className="w-full relative">
+   <>
+   {
+    isLoading ? (
+      <Loader />
+    ) : (
+      <div className="w-full relative">
       <div
         className={`${
           active
@@ -68,23 +111,24 @@ const Header:FC<Props> = ({activeItem,setOpen,setRoute,route,open}) => {
                   onClick={() => setOpenSidebar(true)}
                 />
               </div>
-              {
-                user?(
-                  <Link href={"/profile"}>
-                  <Image src={user.avatar ? user.avatar : avatar}
-                  alt=""
-                  className="w-[30px] h-[30px] rounded-full"
+              {userData ? (
+                <Link href={"/profile"}>
+                  <Image
+                    src={userData?.user.avatar ? userData.user.avatar.url : avatar}
+                    alt=""
+                    width={30}
+                    height={30}
+                    className="w-[30px] h-[30px] rounded-full cursor-pointer"
+                    style={{border: activeItem === 5 ? "2px solid #37a39a" : "none"}}
                   />
-                  </Link>
-                ) : (
-                  <HiOutlineUserCircle
-                    size={25}
-                    className="hidden 800px:block cursor-pointer dark:text-white text-black"
-                    onClick={() => setOpen(true)}
-                  />
-                )
-              }
-              
+                </Link>
+              ) : (
+                <HiOutlineUserCircle
+                  size={25}
+                  className="hidden 800px:block cursor-pointer dark:text-white text-black"
+                  onClick={() => setOpen(true)}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -98,19 +142,28 @@ const Header:FC<Props> = ({activeItem,setOpen,setRoute,route,open}) => {
           >
             <div className="w-[70%] fixed z-[999999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0">
               <NavItems activeItem={activeItem} isMobile={true} />
-              
-                
-             
+              {userData?.user ? (
+                <Link href={"/profile"}>
+                  <Image
+                    src={userData?.user.avatar ? userData.user.avatar.url : avatar}
+                    alt=""
+                    width={30}
+                    height={30}
+                    className="w-[30px] h-[30px] rounded-full ml-[20px] cursor-pointer"
+                    style={{border: activeItem === 5 ? "2px solid #37a39a" : "none"}}
+                  />
+                </Link>
+              ) : (
                 <HiOutlineUserCircle
                   size={25}
                   className="hidden 800px:block cursor-pointer dark:text-white text-black"
                   onClick={() => setOpen(true)}
                 />
-            
+              )}
               <br />
               <br />
               <p className="text-[16px] px-2 pl-5 text-black dark:text-white">
-                Copyright © 2023 MyLearning
+                Copyright © 2025 MyLearning
               </p>
             </div>
           </div>
@@ -125,7 +178,7 @@ const Header:FC<Props> = ({activeItem,setOpen,setRoute,route,open}) => {
               setRoute={setRoute}
               activeItem={activeItem}
               component={Login}
-              
+              refetch={refetch}
             />
           )}
         </>
@@ -158,10 +211,11 @@ const Header:FC<Props> = ({activeItem,setOpen,setRoute,route,open}) => {
           )}
         </>
       )}
+    </div>
+    )
+   }
+   </>
+  );
+};
 
-      
-      </div>
-  )
-}
-
-export default Header
+export default Header;
