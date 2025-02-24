@@ -36,7 +36,7 @@ const CreateCourse = (props: Props) => {
     estimatedPrice: "",
     tags: "",
     level: "",
-    categories:"",
+    categories:"", 
     demoUrl: "",
     thumbnail: "",
   });

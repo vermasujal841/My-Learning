@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import ErrorHandler from "../utils/ErrorHandler";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import LayoutModel from "../models/layout.model";
-import cloudinary from "cloudinary"; 
+import cloudinary from "cloudinary";
 
 // create layout
 export const createLayout = CatchAsyncError(
@@ -67,7 +67,6 @@ export const createLayout = CatchAsyncError(
     }
   }
 );
-
 
 // Edit layout
 export const editLayout = CatchAsyncError(
@@ -152,7 +151,7 @@ export const editLayout = CatchAsyncError(
 export const getLayoutByType = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { type } = req.body;
+      const { type } = req.params;
       const layout = await LayoutModel.findOne({ type });
       res.status(201).json({
         success: true,

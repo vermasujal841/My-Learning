@@ -19,4 +19,4 @@ export const getAllCoursesService = async (res: Response) => {
       success: true,
       courses,
     });
-  };
+  }; 

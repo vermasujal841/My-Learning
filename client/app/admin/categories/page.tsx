@@ -1,12 +1,12 @@
-'use client'
-import DashboardHero from '@/app/components/Admin/DashboardHero'
-import AdminProtected from '@/app/hooks/adminProtected'
-import Heading from '@/app/utils/Heading'
-import React from 'react'
+"use client";
+import DashboardHero from "@/app/components/Admin/DashboardHero";
+import AdminProtected from "@/app/hooks/adminProtected";
+import Heading from "@/app/utils/Heading";
+import React from "react";
 import AdminSidebar from "../../components/Admin/sidebar/AdminSidebar";
-import AllCourses from "../../components/Admin/Course/AllCourses";
+import EditCategories from "../../components/Admin/Customization/EditCategories";
 
-type Props = {}
+type Props = {};
 
 const page = (props: Props) => {
   return (
@@ -23,12 +23,12 @@ const page = (props: Props) => {
           </div>
           <div className="w-[85%]">
             <DashboardHero />
-            <AllCourses />
+            <EditCategories />
           </div>
         </div>
       </AdminProtected>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
