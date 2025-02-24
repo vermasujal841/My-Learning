@@ -175,10 +175,7 @@ export const updateAccessToken = CatchAsyncError(async(req:Request,res:Response,
 
         await redis.set(user._id,JSON.stringify(user),"EX",604800); // we are setting the data for 7 days in redis database
 
-        res.status(200).json({
-            status: "success",
-            accessToken,
-        })
+       next();
 
     } catch (error:any) {
         return next(new ErrorHandler(error.message,400));
