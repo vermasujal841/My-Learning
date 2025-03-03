@@ -20,10 +20,12 @@ app.use(cookieParser());
 //body parser
 app.use(express.json({limit:"50mb"}));
 //cors cross origin resource sharing
-app.use(cors({
-    origin: "*",
-    credentials:true
-}));
+app.use(
+    cors({
+        origin: ['http://localhost:3000', "https://my-learning-7z285loy0-sujals-projects-d94254e2.vercel.app/"],
+        credentials: true,
+    })
+);
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
 	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
