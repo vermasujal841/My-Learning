@@ -29,7 +29,7 @@ import { useTheme } from "next-themes";
 interface itemProps {
   title: string;
   to: string;
-  icon: JSX.Element;
+  icon: React.ReactNode;
   selected: string;
   setSelected: any;
 }

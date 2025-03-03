@@ -8,10 +8,10 @@ export interface IComment extends Document {
 }
 
 interface IReview extends Document {
-  user: object;
-  rating: number;
+  user: IUser;
+  rating?: number;
   comment: string;
-  commentReplies: IComment[];
+  commentReplies?: IReview[];
 }
 
 interface ILink extends Document {
@@ -26,7 +26,7 @@ interface ICourseData extends Document {
   videoThumbnail: object;
   videoSection: string;
   videoLength: number;
-  videoPlayer: string; 
+  videoPlayer: string;
   links: ILink[];
   suggestion: string;
   questions: IComment[];
@@ -73,7 +73,7 @@ const commentSchema = new Schema<IComment>({
 
 const courseDataSchema = new Schema<ICourseData>({
   videoUrl: String,
-  videoThumbnail:Object,
+  videoThumbnail: Object,
   title: String,
   videoSection: String,
   description: String,
@@ -93,8 +93,8 @@ const courseSchema = new Schema<ICourse>({
     type: String,
     required: true,
   },
-  categories: {
-    type: String,
+  categories:{
+    type:String,
     required: true,
   },
   price: {
@@ -140,5 +140,5 @@ const courseSchema = new Schema<ICourse>({
 
 
 const CourseModel: Model<ICourse> = mongoose.model("Course", courseSchema);
- 
+
 export default CourseModel;

@@ -84,6 +84,7 @@ export const editCourse = CatchAsyncError(
 );
 
 
+
 // get single course (without purchasing)
 
 export const getSingleCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction)=>{
@@ -225,6 +226,8 @@ export const addAnswer=CatchAsyncError(async (req:Request,res:Response,next:Next
     const newAnswer:any = {
       user: req.user,
       answer,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     }
     //add this answer to our question
     question.questionReplies.push(newAnswer);
@@ -315,13 +318,14 @@ export const addReview = CatchAsyncError(
 
       await course?.save();
 
-      const notification = {
-        title:"New Review Received",
-        message: `${req.user?.name} has given a review in ${course?.name}`,
-      }
+      await redis.set(courseId, JSON.stringify(course), "EX", 604800); // 7days
 
-      // create notification 
-      
+      // create notification
+      await NotificationModel.create({
+        user: req.user?._id,
+        title: "New Review Received",
+        message: `${req.user?.name} has given a review in ${course?.name}`,
+      });
 
 
       res.status(200).json({
@@ -333,7 +337,6 @@ export const addReview = CatchAsyncError(
     }
   }
 );
-
 // add reply in review
 interface IAddReviewData {
   comment: string;
@@ -361,7 +364,9 @@ export const addReplyToReview = CatchAsyncError(
 
       const replyData: any = {
         user: req.user,
-        comment
+        comment,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
       if(!review.commentReplies){
         review.commentReplies = [];  // if there is no reply yet create an empty array for it  // this is a good practice to always initialize array when adding new field in mongoose schema  // if we don't initialize it mongoose will add it as empty array and we will have to check if its empty or not before pushing new data  // this is a good practice to always initialize array when adding new field in mongoose schema  // this is a good practice to always initialize array when adding new field in mongoose schema  // this is a good practice to always initialize array when adding new field in mongoose schema  // this is a good practice to always initialize array when adding new field in mongoose schema  // this is a good practice to always initialize array when adding new field in mongoose schema  // this is a good practice to always initialize array when adding new field in mongoose schema  // this is a good practice to always initialize array when adding new field in mongoose schema  // this is
@@ -373,7 +378,7 @@ export const addReplyToReview = CatchAsyncError(
 
       await course?.save();
 
-      
+      await redis.set(courseId,JSON.stringify(course),"EX",604800);
 
       res.status(200).json({
         success: true,

@@ -129,8 +129,8 @@ const EditCourse:FC<Props> = ({id}) => {
       totalVideos: courseContentData.length,
       benefits: formattedBenefits,
       prerequisites: formattedPrerequisites,
-      courseContent: formattedCourseContentData,
-    };
+      courseData: formattedCourseContentData,
+    }; 
 
     setCourseData(data);
   };
@@ -139,6 +139,7 @@ const EditCourse:FC<Props> = ({id}) => {
   const handleCourseCreate = async (e: any) => {
     const data = courseData;
     await editCourse({id:editCourseData?._id,data});
+    console.log(data);
   };
 
   return (

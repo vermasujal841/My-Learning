@@ -9,16 +9,23 @@ import path from 'path';
 import ejs from 'ejs';
 import sendMail from '../utils/sendMail';
 import NotificationModel from '../models/notification.model';
+import { redis } from '../utils/redis';
 
 
 export const createOrder = CatchAsyncError(async(req:Request,res:Response,next:NextFunction)=>{
     try{
-        const {courseId,payment_info} = req.body as IOrder;
+        const {courseId} = req.body as IOrder;
         const user = await userModel.findById(req.user?._id);
-        const courseExistInUser = user?.courses.some((course:any) => course._id.toString() === courseId);
-        if(!courseExistInUser){
-            return next(new ErrorHandler("You are not eligible to purchase this course",401));
-        }
+        const courseExistInUser = user?.courses.some(
+            (course: any) => course._id.toString() === courseId
+          );
+    
+          if (courseExistInUser) {
+            return next(
+              new ErrorHandler("You have already purchased this course", 400)
+            );
+          }
+
         const course = await CourseModel.findById(courseId);
         if(!course){
             return next(new ErrorHandler("Invalid course id",404));
@@ -26,7 +33,6 @@ export const createOrder = CatchAsyncError(async(req:Request,res:Response,next:N
         const data:any={
             courseId: course._id,
             userId: user?._id,
-            payment_info,
         }
         
         const mailData={
@@ -54,16 +60,16 @@ export const createOrder = CatchAsyncError(async(req:Request,res:Response,next:N
         }
         const courseid:any=course?._id;
         user?.courses.push(courseid);
+        await redis.set(req.user?._id,JSON.stringify(user));
         await user?.save();
          await NotificationModel.create({
             user:user?._id,
             title:"New Order",
             message:`You have a new order from ${course?.name}`,
         });
-        course.purchased ? course.purchased +=1:course.purchased;
+        course.purchased +=1;
         await course.save();
         newOrder(data,res,next);
-
     }
     catch(error:any){
         return next(new ErrorHandler(error.message,400));

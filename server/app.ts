@@ -9,7 +9,7 @@ import orderRouter from './routes/order.route';
 import notificationRoute from './routes/notification.route';
 import analyticsRouter from './routes/analytics.route';
 import layoutRouter from './routes/layout.route';
-
+import { rateLimit } from 'express-rate-limit'
 
 require('dotenv').config();
 
@@ -24,7 +24,16 @@ app.use(cors({
     origin:['http://localhost:3000'],
     credentials:true
 }));
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	// store: ... , // Redis, Memcached, etc. See below.
+})
 
+// Apply the rate limiting middleware to all requests.
+app.use(limiter)
 //testing api
 app.use('/api/v1',userRouter)
 app.use('/api/v1',courseRouter)
@@ -45,5 +54,8 @@ app.all("*",(req:Request,res:Response,next:NextFunction)=>{
     err.status = 404;
     next(err);
 })
+
+app.use(limiter)
+
 app.use(ErrorMiddleware)
 //mongodb+srv://vermasujal16:<db_password>@lms.akoq2.mongodb.net/
