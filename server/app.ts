@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(express.json({limit:"50mb"}));
 //cors cross origin resource sharing
 app.use(cors({
-    origin:['http://localhost:3000'],
+    origin:['http://localhost:3000','https://my-learning-7z285loy0-sujals-projects-d94254e2.vercel.app/'],
     credentials:true
 }));
 const limiter = rateLimit({
