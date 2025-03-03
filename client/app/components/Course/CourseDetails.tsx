@@ -256,7 +256,7 @@ const CourseDetails = ({ data, setRoute, setOpen: openAuthModal }: Props) => {
                 )}
               </div>
 
-              {error && <p className="text-red-500">{error.message || "Order failed."}</p>}
+              
 
               <br />
               <p className="pb-1 text-black dark:text-white">• Source code included</p>
