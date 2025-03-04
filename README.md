@@ -113,7 +113,7 @@ MyLearning is a comprehensive Learning Management System (LMS) built with modern
       <p align="center">Home Page</p>
     </td>
     <td width="50%">
-      <img src="" alt="Course Page"/>
+      <img src="https://github.com/user-attachments/assets/570cca94-f0ed-466d-962e-c7e99245887c" alt="Course Page"/>
       <p align="center">Course Page</p>
     </td>
   </tr>
@@ -125,12 +125,6 @@ MyLearning is a comprehensive Learning Management System (LMS) built with modern
     <td width="50%">
       <img width="943" src="https://github.com/user-attachments/assets/814ea21f-51f9-475d-a888-67472800dec7" alt="Enroll Course List"/>
       <p align="center">Enroll Course List</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" width="100%">
-      <img width="638" src="https://github.com/user-attachments/assets/570cca94-f0ed-466d-962e-c7e99245887c" alt="Course Details Page"/>
-      <p align="center">Course Details Page</p>
     </td>
   </tr>
 </table>
